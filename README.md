@@ -1,0 +1,1 @@
+# masterportal-addon-bwastr-locator
