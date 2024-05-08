@@ -1,0 +1,16 @@
+{
+  "modules": {
+    "tools": {
+      "bWaStrLocator": {
+        "title" : "Waterway Locator",
+        "searchPlaceholder": "Waterway (name, id)",
+        "fromKMPlaceholder": "from km",
+        "toKMPlaceholder": "to km",
+        "showWaterStreet": "Show waterway",
+        "columns": {
+          "concatName": "Results"
+        }
+      }
+    }
+  }
+}
