@@ -4,10 +4,10 @@
 This [Masterportal](https://www.masterportal.org/) addon provides a feature for searching german waterways and segments of waterways. The search is based on the service [BWaStr-Locator](https://via.bund.de/wsv/bwastr-locator).
 
 ## Prerequisites
-This addon works with [Masterportal version 3](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/v3.0.0-beta2/).
+This addon works with [Masterportal version 3](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/v3.0.0/).
 
 ## How to add this addon to your Masterportal configuration
-1. Pull and copy addon code into the *addons* folder (./addons/addons_3_0_0) of your Masterportal instance.
+1. Pull and copy addon code into the *addons* folder (./addons) of your Masterportal instance.
 2. Activate addon by adding configuration sections in *addonsConf.json* and *config.js*.
 3. Add addon as an item to Masterportal's tools menu by editing *config.json*.
 

@@ -1,8 +1,8 @@
 <script>
 import {mapActions, mapGetters} from "vuex";
 import getters from "../store/gettersBWaStrLocator";
-import FlatButton from "../../../../src_3_0_0/shared/modules/buttons/components/FlatButton.vue";
-import InputText from "../../../../src_3_0_0/shared/modules/inputs/components/InputText.vue";
+import FlatButton from "../../../src/shared/modules/buttons/components/FlatButton.vue";
+import InputText from "../../../src/shared/modules/inputs/components/InputText.vue";
 import axios from "axios";
 
 export default {
