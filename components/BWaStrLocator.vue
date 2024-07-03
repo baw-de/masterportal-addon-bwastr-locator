@@ -156,7 +156,7 @@ export default {
             :placeholder="translate('additional:modules.tools.bWaStrLocator.searchPlaceholder')"
             :aria-label="translate('additional:modules.tools.bWaStrLocator.searchPlaceholder')"
             :label="translate('additional:modules.tools.bWaStrLocator.searchPlaceholder')"
-            :max-length="50"
+            max-length="50"
             :input="search"
         />
         <vue-good-table
