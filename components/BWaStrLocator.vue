@@ -3,11 +3,14 @@ import {mapActions, mapGetters} from "vuex";
 import getters from "../store/gettersBWaStrLocator";
 import FlatButton from "../../../src/shared/modules/buttons/components/FlatButton.vue";
 import InputText from "../../../src/shared/modules/inputs/components/InputText.vue";
+import 'vue-good-table-next/dist/vue-good-table-next.css'
+import { VueGoodTable } from 'vue-good-table-next';
 import axios from "axios";
 
 export default {
     name: "BWaStrLocator",
     components: {
+        VueGoodTable,
         FlatButton,
         InputText
     },
