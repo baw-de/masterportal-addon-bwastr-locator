@@ -24,6 +24,12 @@ const actions = {
         wsSource.getFeatures()[0]
             .getGeometry()
             .setCoordinates([]);
+    },
+    selectWaterStreet ({state}, row) {
+        state.selectedWaterStreet = row.row;
+        state.fromKilometer = state.selectedWaterStreet.km_von;
+        state.toKilometer = state.selectedWaterStreet.km_bis;
+        state.searchText = state.selectedWaterStreet.concat_name;
     }
 };
 

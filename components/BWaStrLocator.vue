@@ -1,11 +1,12 @@
 <script>
-import {mapActions, mapGetters} from "vuex";
+import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersBWaStrLocator";
 import FlatButton from "../../../src/shared/modules/buttons/components/FlatButton.vue";
 import InputText from "../../../src/shared/modules/inputs/components/InputText.vue";
 import 'vue-good-table-next/dist/vue-good-table-next.css'
 import { VueGoodTable } from 'vue-good-table-next';
 import axios from "axios";
+import mutations from "../store/mutationsBWaStrLocator";
 
 export default {
     name: "BWaStrLocator",
@@ -19,32 +20,12 @@ export default {
         return {
             searchResults: [],
             debounceTimer: null,
-            selectedWaterStreet: null,
-            searchText: "",
-            toKilometer: 0,
-            fromKilometer: 0,
             geocoding: null
         };
     },
     computed: {
         ...mapGetters("Modules/BWaStrLocator", Object.keys(getters)),
-        ...mapGetters("Maps", ["mode"]),
-        toKM: {
-            get () {
-                return this.toKilometer;
-            },
-            set (newValue) {
-                this.toKilometer = this.formatDecimal(newValue, this.selectedWaterStreet ? this.selectedWaterStreet.km_bis : 0);
-            }
-        },
-        fromKM: {
-            get () {
-                return this.fromKilometer;
-            },
-            set (newValue) {
-                this.fromKilometer = this.formatDecimal(newValue, this.selectedWaterStreet ? this.selectedWaterStreet.km_von : 0);
-            }
-        }
+        ...mapGetters("Maps", ["mode"])
     },
     watch: {
         feature () {
@@ -79,9 +60,9 @@ export default {
             }
         },
         clearSelectedData () {
-            this.toKM = 0;
-            this.fromKM = 0;
-            this.selectedWaterStreet = null;
+            this.setToKilometer(0);
+            this.setFromKilometer(0);
+            this.setSelectedWaterStreet(null);
         },
         debounce (callback) {
             this.clearActiveDebounceTimer();
@@ -95,29 +76,20 @@ export default {
         translate (key, options = null) {
             return this.$t(key, options);
         },
-        selectWaterStreet (row) {
-            this.selectedWaterStreet = row.row;
-            this.fromKM = this.selectedWaterStreet.km_von;
-            this.toKM = this.selectedWaterStreet.km_bis;
-            this.searchText = this.selectedWaterStreet.concat_name;
-            setTimeout(() => {
-                document.getElementById("ws-locator-from").focus();
-            });
-        },
         showWaterStreet () {
             this.adjustFromAndToValues();
-            this.fetchGeocoding(this.selectedWaterStreet.bwastrid, this.fromKM, this.toKM).then(geocoding => {
+            this.fetchGeocoding(this.selectedWaterStreet.bwastrid, this.fromKilometer, this.toKilometer).then(geocoding => {
                 if (geocoding.length > 0) {
                     this.geocoding = geocoding[0];
-                    const coordinates = this.geocoding.geometry.coordinates;
+                    const geometry = this.geocoding.geometry;
 
-                    this.drawWaterStreetToMap({coordinates});
+                    this.drawWaterStreetToMap({geometry});
                 }
             });
         },
         adjustFromAndToValues () {
-            this.fromKM = this.fromKM < this.selectedWaterStreet.km_von || this.fromKM > this.selectedWaterStreet.km_bis ? this.selectedWaterStreet.km_von : this.fromKM;
-            this.toKM = this.toKM < this.selectedWaterStreet.km_von || this.toKM > this.selectedWaterStreet.km_bis ? this.selectedWaterStreet.km_bis : this.toKM;
+            this.setFromKilometer(this.fromKilometer < this.selectedWaterStreet.km_von || this.fromKilometer > this.selectedWaterStreet.km_bis ? this.selectedWaterStreet.km_von : this.fromKilometer);
+            this.setToKilometer(this.toKilometer < this.selectedWaterStreet.km_von || this.toKilometer > this.selectedWaterStreet.km_bis ? this.selectedWaterStreet.km_bis : this.toKilometer);
         },
         formatDecimal (value, defaultValue) {
             let formattedValue = ("" + String(value)).replace(",", ".");
@@ -130,7 +102,7 @@ export default {
         async fetchFromBackend (searchText) {
             const response = await axios.get(
                 this.wsQueryAPI + "?searchterm=" + searchText +
-                "&searchfield=" + this.searchField
+                "&searchfield=" + (Config?.bWaStrLocator?.searchField ? Config?.bWaStrLocator?.searchField : "all")
             );
 
             return response.status === 200 ? response.data.result : [];
@@ -143,7 +115,13 @@ export default {
 
             return response.status === 200 ? response.data.result : [];
         },
-        ...mapActions("Modules/BWaStrLocator", ["drawWaterStreetToMap", "reset"])
+        setFocusToFromKM () {
+            setTimeout(() => {
+                document.getElementById("ws-locator-from").focus();
+            });
+        },
+        ...mapActions("Modules/BWaStrLocator", ["drawWaterStreetToMap", "reset", "selectWaterStreet"]),
+        ...mapMutations("Modules/BWaStrLocator",  Object.keys(mutations))
     }
 };
 </script>
@@ -152,7 +130,7 @@ export default {
     <div class="ws-search">
         <InputText
             id="ws-locator-search"
-            v-model="searchText"
+            :value="searchText"
             :placeholder="translate('additional:modules.tools.bWaStrLocator.searchPlaceholder')"
             :aria-label="translate('additional:modules.tools.bWaStrLocator.searchPlaceholder')"
             :label="translate('additional:modules.tools.bWaStrLocator.searchPlaceholder')"
@@ -170,7 +148,7 @@ export default {
                 <span v-if="props.column.field === 'concat_name'">
                     <a
                         href="#"
-                        @click="selectWaterStreet(props)"
+                        @click="selectWaterStreet(props);setFocusToFromKM();"
                     >
                         {{ props.row.concat_name }}
                     </a>
@@ -183,19 +161,19 @@ export default {
         <div v-if="selectedWaterStreet">
             <InputText
                 id="ws-locator-from"
-                :value="''+fromKM"
+                :value="fromKilometer.toString()"
                 :placeholder="translate('additional:modules.tools.bWaStrLocator.fromKMPlaceholder')"
                 :aria-label="translate('additional:modules.tools.bWaStrLocator.fromKMPlaceholder')"
                 :label="translate('additional:modules.tools.bWaStrLocator.fromKMPlaceholder')"
-                :input="(newValue) => {fromKM = newValue;}"
+                :input="(newValue) => {setFromKilometer(newValue)}"
             />
             <InputText
                 id="ws-locator-till"
-                :value="''+toKM"
+                :value="toKilometer.toString()"
                 :placeholder="translate('additional:modules.tools.bWaStrLocator.toKMPlaceholder')"
                 :aria-label="translate('additional:modules.tools.bWaStrLocator.toKMPlaceholder')"
                 :label="translate('additional:modules.tools.bWaStrLocator.toKMPlaceholder')"
-                :input="(newValue) => {toKM = newValue;}"
+                :input="(newValue) => {setToKilometer(newValue);}"
             />
             <FlatButton
                 :id="'show-water-street'"

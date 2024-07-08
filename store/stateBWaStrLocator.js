@@ -16,7 +16,11 @@ const state = {
     renderToWindow: true,
     resizableWindow: true,
     isVisibleInMenu: true,
-    deactivateGFI: false
+    deactivateGFI: false,
+    selectedWaterStreet: null,
+    searchText: "",
+    toKilometer: 0,
+    fromKilometer: 0
 };
 
 export default state;
