@@ -1,6 +1,6 @@
 const actions = {
 
-    async drawWaterStreetToMap ({state, dispatch, rootState}, {coordinates}) {
+    async drawWaterStreetToMap ({state, dispatch, rootState}, {geometry}) {
         const map = await mapCollection.getMap(rootState.Maps.mode),
             {
                 wsLayer,
@@ -8,15 +8,7 @@ const actions = {
             } = state,
             layerExists = await dispatch("Maps/checkLayer", wsLayer, {root: true});
 
-        let flatCoordinates = [];
-
-        coordinates.forEach(c => {
-            flatCoordinates = flatCoordinates.concat(c);
-        });
-
-        wsSource.getFeatures()[0]
-            .getGeometry()
-            .setCoordinates(flatCoordinates);
+        wsSource.getFeatures()[0].getGeometry().setCoordinates(geometry.coordinates)
 
         if (!layerExists) {
             dispatch("Maps/addLayer", wsLayer, {root: true});
