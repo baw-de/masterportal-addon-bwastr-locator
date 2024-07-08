@@ -129,16 +129,16 @@ export default {
         },
         async fetchFromBackend (searchText) {
             const response = await axios.get(
-                Config?.bWaStrLocator?.wsQueryAPI + "?searchterm=" + searchText +
-                "&searchfield=" + (Config?.bWaStrLocator?.searchField ? Config?.bWaStrLocator?.searchField : "all")
+                this.wsQueryAPI + "?searchterm=" + searchText +
+                "&searchfield=" + this.searchField
             );
 
             return response.status === 200 ? response.data.result : [];
         },
         async fetchGeocoding (wsId, fromKM, toKM) {
             const response = await axios.get(
-                Config?.bWaStrLocator?.geocodingQueryAPI + "?bwastrid=" + wsId + "&km_von=" + fromKM + "&km_bis=" + toKM +
-                "&wkid=" + (Config?.bWaStrLocator?.wkId ? Config?.bWaStrLocator?.wkId : 25832)
+                this.geocodingQueryAPI + "?bwastrid=" + wsId + "&km_von=" + fromKM + "&km_bis=" + toKM +
+                "&wkid=" + this.wkId
             );
 
             return response.status === 200 ? response.data.result : [];
