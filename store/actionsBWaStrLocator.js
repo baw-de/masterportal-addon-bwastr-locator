@@ -8,7 +8,7 @@ const actions = {
             } = state,
             layerExists = await dispatch("Maps/checkLayer", wsLayer, {root: true});
 
-        wsSource.getFeatures()[0].getGeometry().setCoordinates(geometry.coordinates)
+        wsSource.getFeatures()[0].getGeometry().setCoordinates(geometry.coordinates);
 
         if (!layerExists) {
             dispatch("Maps/addLayer", wsLayer, {root: true});

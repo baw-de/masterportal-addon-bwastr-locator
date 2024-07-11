@@ -3,8 +3,8 @@ import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersBWaStrLocator";
 import FlatButton from "../../../src/shared/modules/buttons/components/FlatButton.vue";
 import InputText from "../../../src/shared/modules/inputs/components/InputText.vue";
-import 'vue-good-table-next/dist/vue-good-table-next.css'
-import { VueGoodTable } from 'vue-good-table-next';
+import "vue-good-table-next/dist/vue-good-table-next.css";
+import {VueGoodTable} from "vue-good-table-next";
 import axios from "axios";
 import mutations from "../store/mutationsBWaStrLocator";
 
@@ -121,7 +121,7 @@ export default {
             });
         },
         ...mapActions("Modules/BWaStrLocator", ["drawWaterStreetToMap", "reset", "selectWaterStreet"]),
-        ...mapMutations("Modules/BWaStrLocator",  Object.keys(mutations))
+        ...mapMutations("Modules/BWaStrLocator", Object.keys(mutations))
     }
 };
 </script>
