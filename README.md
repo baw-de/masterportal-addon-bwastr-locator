@@ -1,5 +1,5 @@
 # BWaStr-Locator addon for Masterportal v3
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) ![version](https://img.shields.io/badge/Version-1.0.0-blue)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) ![version](https://img.shields.io/badge/Version-1.1.0-blue)
 
 This [Masterportal](https://www.masterportal.org/) addon provides a feature for searching german waterways and segments of waterways. The search is based on the service [BWaStr-Locator](https://via.bund.de/wsv/bwastr-locator).
 
