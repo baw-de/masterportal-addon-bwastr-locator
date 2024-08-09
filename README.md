@@ -4,10 +4,10 @@
 This [Masterportal](https://www.masterportal.org/) addon provides a feature for searching german waterways and segments of waterways. The search is based on the service [BWaStr-Locator](https://via.bund.de/wsv/bwastr-locator).
 
 ## Prerequisites
-This addon works with [Masterportal version 3](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/v3.0.0-beta2/).
+This addon works with [Masterportal version 3](https://bitbucket.org/geowerkstatt-hamburg/masterportal/src/v3.0.0/).
 
 ## How to add this addon to your Masterportal configuration
-1. Pull and copy addon code into the *addons* folder (./addons/addons_3_0_0) of your Masterportal instance.
+1. Pull and copy addon code into the *addons* folder (./addons) of your Masterportal instance.
 2. Activate addon by adding configuration sections in *addonsConf.json* and *config.js*.
 3. Add addon as an item to Masterportal's tools menu by editing *config.json*.
 
@@ -27,24 +27,10 @@ For more information about using and developing addons see Masterportal's [devel
 ```
 const Config = {
   ...
-  bWaStrLocator: {
-    wsQueryAPI: "https://via.bund.de/wsv/bwastr-locator/rest/bwastrinfo/query",
-    geocodingQueryAPI: "https://via.bund.de/wsv/bwastr-locator/rest/geokodierung/query",
-    wkId: 25833,
-    searchField: "all"
-  },
   addons: ["bWaStrLocator", ...]
   ...
 }
 ```
-#### Configuration parameter in config.js
-| Parameter | Description |
-| ------- | ------- |
-| wsQueryAPI | (String) URL of the public REST API of service BWaStr Locator (bwastrinfo) |
-| geocodingQueryAPI | (String) URL of the public REST API of service BWaStr Locator (geocoding) |
-| searchField | (String) Search field. Available values: "all" (default), "bwastrid", "bwastr_name", "strecken_name". For more information see [documentation of BWaStr-Locator-REST-API](https://www.google.com/search?q=Bundeswasserstra%C3%9Fen-Locator+REST). |
-| wkId | (Number) Spatial reference system (EPSG code) to use for displaying geometries (i.e. 25833)|
-
 
 ### config.json
 ```
@@ -55,7 +41,11 @@ const Config = {
       "sections": [
         [
           {
-            "type": "bWaStrLocator"
+            "type": "bWaStrLocator",
+            "wsQueryAPI": "https://via.bund.de/wsv/bwastr-locator/rest/bwastrinfo/query",
+            "geocodingQueryAPI": "https://via.bund.de/wsv/bwastr-locator/rest/geokodierung/query",
+            "wkId": 25833,
+            "searchField": "all"
           },
           ...
         ]
@@ -64,6 +54,14 @@ const Config = {
   }
 }
 ```
+#### Configuration parameter in config.json
+| Parameter | Default | Description |
+| ------- | ------- | ------- |
+| wsQueryAPI | https://via.bund.de/wsv/bwastr-locator/rest/bwastrinfo/query | (String) URL of the public REST API of service BWaStr Locator (bwastrinfo) |
+| geocodingQueryAPI | https://via.bund.de/wsv/bwastr-locator/rest/geokodierung/query | (String) URL of the public REST API of service BWaStr Locator (geocoding) |
+| searchField | all | (String) Search field. Available values: "all" (default), "bwastrid", "bwastr_name", "strecken_name". For more information see [documentation of BWaStr-Locator-REST-API](https://www.google.com/search?q=Bundeswasserstra%C3%9Fen-Locator+REST). |
+| wkId | 25832 | (Number) Spatial reference system (EPSG code) to use for displaying geometries (i.e. 25833)|
+
 
 ## How to use it
 1. Select tool *Bundeswasserstraßen Locator* in Masterportal's menu.
