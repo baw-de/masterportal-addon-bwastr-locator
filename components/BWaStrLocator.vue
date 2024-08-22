@@ -35,6 +35,18 @@ export default {
     beforeUnmount () {
         this.reset();
     },
+    mounted () {
+      if (this.bwastrid) {
+        this.fetchFromBackendById(this.bwastrid).then(bwastr => {
+          if (bwastr) {
+            this.setSearchText(bwastr.concat_name);
+            this.setSelectedWaterStreet(bwastr);
+            this.showWaterStreet();
+          }
+        });
+        this.setBwastrid(undefined);
+      }
+    },
     methods: {
         getSearchResultColumns () {
             return [
@@ -46,6 +58,7 @@ export default {
             ];
         },
         search (searchText) {
+            this.setSearchText(searchText);
             this.clearSelectedData();
             if (searchText.length > 1) {
                 this.debounce(() => {
@@ -106,6 +119,11 @@ export default {
             );
 
             return response.status === 200 ? response.data.result : [];
+        },
+        async fetchFromBackendById (id) {
+          const response = await axios.get(this.wsQueryAPI + "?searchterm=" + id + "&searchfield=bwastrid");
+
+          return response.status === 200 ? response.data.result.find(result => result.bwastrid === id) : undefined;
         },
         async fetchGeocoding (wsId, fromKM, toKM) {
             const response = await axios.get(
