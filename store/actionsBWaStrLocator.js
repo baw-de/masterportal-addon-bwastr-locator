@@ -3,7 +3,7 @@ import Point from "ol/geom/Point";
 
 const actions = {
 
-    async drawWaterStreetToMap ({state, dispatch, rootState}, {geometry, zoomToExtend}) {
+    async drawWaterStreetToMap ({state, dispatch, rootState}, {geometry, zoomToExtent}) {
         const map = await mapCollection.getMap(rootState.Maps.mode),
             {
                 wsLayer,
@@ -23,7 +23,7 @@ const actions = {
             dispatch("Maps/addLayer", wsLayer, {root: true});
         }
 
-        if(zoomToExtend){
+        if(zoomToExtent){
             map.getView().fit(wsSource.getExtent());
         }
     },

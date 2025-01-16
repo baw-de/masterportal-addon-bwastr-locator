@@ -101,14 +101,14 @@ export default {
         translate (key, options = null) {
             return this.$t(key, options);
         },
-        showWaterStreet () {
+        showWaterStreet (zoomToExtent = true) {
             this.adjustFromAndToValues();
             this.fetchGeocoding(this.selectedWaterStreet.bwastrid, this.fromKilometer, this.toKilometer).then(geocoding => {
                 if (geocoding.length > 0) {
                     this.geocoding = geocoding[0];
                     const geometry = this.geocoding.geometry;
 
-                    this.drawWaterStreetToMap({geometry});
+                    this.drawWaterStreetToMap({geometry, zoomToExtent});
                 }
             });
         },
