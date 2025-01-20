@@ -113,8 +113,12 @@ export default {
             });
         },
         adjustFromAndToValues () {
+            const hasFromKilometer = this.fromKilometer.length > 0,
+                hasToKilometer = this.toKilometer.length > 0;
             this.setFromKilometer(this.fromKilometer < this.selectedWaterStreet.km_von || this.fromKilometer > this.selectedWaterStreet.km_bis ? this.selectedWaterStreet.km_von : this.fromKilometer);
-            this.setToKilometer(this.toKilometer < this.selectedWaterStreet.km_von || this.toKilometer > this.selectedWaterStreet.km_bis ? this.selectedWaterStreet.km_bis : this.toKilometer);
+            if (!hasFromKilometer || hasToKilometer){
+                this.setToKilometer(this.toKilometer < this.selectedWaterStreet.km_von || this.toKilometer > this.selectedWaterStreet.km_bis ? this.selectedWaterStreet.km_bis : this.toKilometer);
+            }
         },
         formatDecimal (value, defaultValue) {
             let formattedValue = ("" + String(value)).replace(",", ".");
@@ -138,7 +142,7 @@ export default {
             return response.status === 200 ? response.data.result.find(result => result.bwastrid === id) : undefined;
         },
         async fetchGeocoding (wsId, fromKM, toKM) {
-            const kilometer_param = toKM.length !== 0 ? "&km_von=" + fromKM + "&km_bis=" + toKM : "&km_wert=" + fromKM,
+            const kilometer_param = toKM.length !== 0 && fromKM !== toKM ? "&km_von=" + fromKM + "&km_bis=" + toKM : "&km_wert=" + fromKM,
                 response = await axios.get(
                 this.geocodingQueryAPI + "?bwastrid=" + wsId + kilometer_param +
                 "&wkid=" + this.wkId
