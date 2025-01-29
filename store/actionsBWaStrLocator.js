@@ -1,6 +1,9 @@
+import MultiLineString from "ol/geom/MultiLineString";
+import Point from "ol/geom/Point";
+
 const actions = {
 
-    async drawWaterStreetToMap ({state, dispatch, rootState}, {geometry}) {
+    async drawWaterStreetToMap ({state, dispatch, rootState}, {geometry, zoomToExtent}) {
         const map = await mapCollection.getMap(rootState.Maps.mode),
             {
                 wsLayer,
@@ -8,13 +11,21 @@ const actions = {
             } = state,
             layerExists = await dispatch("Maps/checkLayer", wsLayer, {root: true});
 
-        wsSource.getFeatures()[0].getGeometry().setCoordinates(geometry.coordinates);
+
+        if(geometry.type === "Point") {
+            wsSource.getFeatures()[0].setGeometry(new Point(geometry.coordinates));
+        }
+        else {
+            wsSource.getFeatures()[0].setGeometry(new MultiLineString(geometry.coordinates));
+        }
 
         if (!layerExists) {
             dispatch("Maps/addLayer", wsLayer, {root: true});
         }
 
-        map.getView().fit(wsSource.getExtent());
+        if(zoomToExtent){
+            map.getView().fit(wsSource.getExtent());
+        }
     },
     reset ({state}) {
         const {

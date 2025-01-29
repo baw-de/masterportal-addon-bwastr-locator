@@ -32,10 +32,34 @@ export default {
             this.init();
         }
     },
+    mounted () {
+        this.setFocusToFirstControl();
+        if (this.bwastrid) {
+            this.fetchFromBackendById(this.bwastrid).then(bwastr => {
+                if (bwastr) {
+                    this.setSearchText(bwastr.concat_name);
+                    this.setSelectedWaterStreet(bwastr);
+                    this.showWaterStreet(false);
+                }
+            });
+            this.setBwastrid(undefined);
+        }
+    },
     beforeUnmount () {
         this.reset();
     },
     methods: {
+        /**
+         * Sets the focus to the first control
+         * @returns {void}
+         */
+        setFocusToFirstControl () {
+            this.$nextTick(() => {
+                if (this.$refs["ws-locator-search"]) {
+                    this.$refs["ws-locator-search"].$el.firstChild.focus();
+                }
+            });
+        },
         getSearchResultColumns () {
             return [
                 {
@@ -46,6 +70,7 @@ export default {
             ];
         },
         search (searchText) {
+            this.setSearchText(searchText);
             this.clearSelectedData();
             if (searchText.length > 1) {
                 this.debounce(() => {
@@ -76,20 +101,24 @@ export default {
         translate (key, options = null) {
             return this.$t(key, options);
         },
-        showWaterStreet () {
+        showWaterStreet (zoomToExtent = true) {
             this.adjustFromAndToValues();
             this.fetchGeocoding(this.selectedWaterStreet.bwastrid, this.fromKilometer, this.toKilometer).then(geocoding => {
                 if (geocoding.length > 0) {
                     this.geocoding = geocoding[0];
                     const geometry = this.geocoding.geometry;
 
-                    this.drawWaterStreetToMap({geometry});
+                    this.drawWaterStreetToMap({geometry, zoomToExtent});
                 }
             });
         },
         adjustFromAndToValues () {
+            const hasFromKilometer = this.fromKilometer.length > 0,
+                hasToKilometer = this.toKilometer.length > 0;
             this.setFromKilometer(this.fromKilometer < this.selectedWaterStreet.km_von || this.fromKilometer > this.selectedWaterStreet.km_bis ? this.selectedWaterStreet.km_von : this.fromKilometer);
-            this.setToKilometer(this.toKilometer < this.selectedWaterStreet.km_von || this.toKilometer > this.selectedWaterStreet.km_bis ? this.selectedWaterStreet.km_bis : this.toKilometer);
+            if (!hasFromKilometer || hasToKilometer){
+                this.setToKilometer(this.toKilometer < this.selectedWaterStreet.km_von || this.toKilometer > this.selectedWaterStreet.km_bis ? this.selectedWaterStreet.km_bis : this.toKilometer);
+            }
         },
         formatDecimal (value, defaultValue) {
             let formattedValue = ("" + String(value)).replace(",", ".");
@@ -107,9 +136,15 @@ export default {
 
             return response.status === 200 ? response.data.result : [];
         },
+        async fetchFromBackendById (id) {
+            const response = await axios.get(this.wsQueryAPI + "?searchterm=" + id + "&searchfield=bwastrid");
+
+            return response.status === 200 ? response.data.result.find(result => result.bwastrid === id) : undefined;
+        },
         async fetchGeocoding (wsId, fromKM, toKM) {
-            const response = await axios.get(
-                this.geocodingQueryAPI + "?bwastrid=" + wsId + "&km_von=" + fromKM + "&km_bis=" + toKM +
+            const kilometer_param = toKM.length !== 0 && fromKM !== toKM ? "&km_von=" + fromKM + "&km_bis=" + toKM : "&km_wert=" + fromKM,
+                response = await axios.get(
+                this.geocodingQueryAPI + "?bwastrid=" + wsId + kilometer_param +
                 "&wkid=" + this.wkId
             );
 
@@ -130,6 +165,7 @@ export default {
     <div class="ws-search">
         <InputText
             id="ws-locator-search"
+            ref="ws-locator-search"
             :value="searchText"
             :placeholder="translate('additional:modules.tools.bWaStrLocator.searchPlaceholder')"
             :aria-label="translate('additional:modules.tools.bWaStrLocator.searchPlaceholder')"
@@ -165,7 +201,7 @@ export default {
                 :placeholder="translate('additional:modules.tools.bWaStrLocator.fromKMPlaceholder')"
                 :aria-label="translate('additional:modules.tools.bWaStrLocator.fromKMPlaceholder')"
                 :label="translate('additional:modules.tools.bWaStrLocator.fromKMPlaceholder')"
-                :input="(newValue) => {setFromKilometer(newValue)}"
+                :input="(newValue) => {setFromKilometer(newValue.replace(',', '.'));}"
             />
             <InputText
                 id="ws-locator-till"
@@ -173,7 +209,7 @@ export default {
                 :placeholder="translate('additional:modules.tools.bWaStrLocator.toKMPlaceholder')"
                 :aria-label="translate('additional:modules.tools.bWaStrLocator.toKMPlaceholder')"
                 :label="translate('additional:modules.tools.bWaStrLocator.toKMPlaceholder')"
-                :input="(newValue) => {setToKilometer(newValue);}"
+                :input="(newValue) => {setToKilometer(newValue.replace(',', '.'));}"
             />
             <FlatButton
                 :id="'show-water-street'"
