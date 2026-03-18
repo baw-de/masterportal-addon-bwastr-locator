@@ -22,7 +22,8 @@ const state = {
     searchText: "",
     toKilometer: 0,
     fromKilometer: 0,
-    bwastrVisible: false
+    bwastrVisible: false,
+    initZoom: false,
 };
 
 export default state;

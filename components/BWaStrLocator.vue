@@ -36,7 +36,7 @@ export default {
                 if (bwastr) {
                     this.setSearchText(bwastr.concat_name);
                     this.setSelectedWaterStreet(bwastr);
-                    this.showWaterStreet(false);
+                    this.showWaterStreet(this.initZoom);
                 }
             });
             this.setBwastrid(undefined);
