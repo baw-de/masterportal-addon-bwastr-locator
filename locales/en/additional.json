@@ -6,7 +6,15 @@
         "searchPlaceholder": "Waterway (name, id)",
         "fromKMPlaceholder": "from km",
         "toKMPlaceholder": "to km",
-        "showWaterStreet": "Show waterway"
+        "showWaterStreet": "Show waterway",
+        "resetWaterStreet": "Reset waterway",
+        "gfiAttributes": {
+          "bwastrid": "Waterway Id",
+          "bwastr_name": "Waterway Name",
+          "strecken_name": "Waterway Route",
+          "fromKM": "From km",
+          "toKM": "To km"
+        }
       }
     }
   }

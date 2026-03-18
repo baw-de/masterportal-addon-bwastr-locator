@@ -6,7 +6,15 @@
         "searchPlaceholder": "Bundeswasserstraße (Name, Id)",
         "fromKMPlaceholder": "Von KM",
         "toKMPlaceholder": "Bis KM",
-        "showWaterStreet": "Wasserstraße anzeigen"
+        "showWaterStreet": "Wasserstraße anzeigen",
+        "resetWaterStreet": "Wasserstraße entfernen",
+        "gfiAttributes": {
+          "bwastrid": "BWaStr-IdNr",
+          "bwastr_name": "BWaStr-Bezeichnung",
+          "strecken_name": "Streckenbezeichnung",
+          "fromKM": "Von KM",
+          "toKM": "Bis KM"
+        }
       }
     }
   }

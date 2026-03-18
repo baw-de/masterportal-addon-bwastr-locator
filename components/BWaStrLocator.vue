@@ -42,9 +42,6 @@ export default {
             this.setBwastrid(undefined);
         }
     },
-    beforeUnmount () {
-        this.reset();
-    },
     methods: {
         /**
          * Sets the focus to the first control
@@ -93,10 +90,9 @@ export default {
             this.adjustFromAndToValues();
             this.fetchGeocoding(this.selectedWaterStreet.bwastrid, this.fromKilometer, this.toKilometer).then(geocoding => {
                 if (geocoding.length > 0) {
-                    this.geocoding = geocoding[0];
-                    const geometry = this.geocoding.geometry;
+                    this.geocoding = geocoding[0];;
 
-                    this.drawWaterStreetToMap({geometry, zoomToExtent});
+                    this.drawWaterStreetToMap({waterstreet: this.geocoding, zoomToExtent});
                 }
             });
         },
@@ -208,6 +204,14 @@ export default {
                 :icon="'bi-search'"
                 :interaction="() => showWaterStreet()"
             />
+            <FlatButton
+                v-if="bwastrVisible"
+                :id="'reset-ws'"
+                :text="translate('additional:modules.tools.bWaStrLocator.resetWaterStreet')"
+                :aria-label="translate('additional:modules.tools.bWaStrLocator.resetWaterStreet')"
+                :icon="'bi-trash'"
+                :interaction="() => reset()"
+            />
         </div>
     </div>
 </template>
@@ -230,6 +234,11 @@ export default {
     color: #00447a;
     text-decoration: underline;
     cursor: pointer;
+}
+
+.ws-search #reset-ws {
+    width: 100%;
+    max-width: 100% !important;
 }
 
 .list-group {
