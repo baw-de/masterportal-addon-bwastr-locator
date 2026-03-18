@@ -69,6 +69,7 @@ const Config = {
 3. Select an entry from search results.
 4. Adjust parameters *from-km* and *to-km* (optional). Use number format "123.45".
 5. Click button "*Show waterway*" to display waterway/segment in the map.
+6. Click button "*Reset waterway*" to remove waterway/segment from the map.
 
 ## Features
 

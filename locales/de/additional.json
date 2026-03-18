@@ -6,10 +6,7 @@
         "searchPlaceholder": "Bundeswasserstraße (Name, Id)",
         "fromKMPlaceholder": "Von KM",
         "toKMPlaceholder": "Bis KM",
-        "showWaterStreet": "Wasserstraße anzeigen",
-        "columns": {
-          "concatName": "Ergebnisse"
-        }
+        "showWaterStreet": "Wasserstraße anzeigen"
       }
     }
   }

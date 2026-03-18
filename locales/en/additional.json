@@ -6,10 +6,7 @@
         "searchPlaceholder": "Waterway (name, id)",
         "fromKMPlaceholder": "from km",
         "toKMPlaceholder": "to km",
-        "showWaterStreet": "Show waterway",
-        "columns": {
-          "concatName": "Results"
-        }
+        "showWaterStreet": "Show waterway"
       }
     }
   }

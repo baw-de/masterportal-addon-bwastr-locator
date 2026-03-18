@@ -1,17 +1,14 @@
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersBWaStrLocator";
-import FlatButton from "../../../src/shared/modules/buttons/components/FlatButton.vue";
-import InputText from "../../../src/shared/modules/inputs/components/InputText.vue";
-import "vue-good-table-next/dist/vue-good-table-next.css";
-import {VueGoodTable} from "vue-good-table-next";
+import FlatButton from "@shared/modules/buttons/components/FlatButton.vue";
+import InputText from "@shared/modules/inputs/components/InputText.vue";
 import axios from "axios";
 import mutations from "../store/mutationsBWaStrLocator";
 
 export default {
     name: "BWaStrLocator",
     components: {
-        VueGoodTable,
         FlatButton,
         InputText
     },
@@ -59,15 +56,6 @@ export default {
                     this.$refs["ws-locator-search"].$el.firstChild.focus();
                 }
             });
-        },
-        getSearchResultColumns () {
-            return [
-                {
-                    label: this.translate("additional:modules.tools.bWaStrLocator.columns.concatName"),
-                    field: "concat_name",
-                    tdClass: "table-link"
-                }
-            ];
         },
         search (searchText) {
             this.setSearchText(searchText);
@@ -175,27 +163,23 @@ export default {
             :input="search"
             :onInput="search"
         />
-        <vue-good-table
+        <ul
             v-if="searchResults.length > 0 && !selectedWaterStreet"
-            :columns="getSearchResultColumns()"
-            :rows="searchResults"
-            max-height="calc(100vh - 400px)"
-            :row-style-class="'table-row alternating-color'"
+            class="list-group dropdown-menu-search dropdown-menu-left"
         >
-            <template #table-row="props">
-                <span v-if="props.column.field === 'concat_name'">
-                    <a
-                        href="#"
-                        @click="selectWaterStreet(props);setFocusToFromKM();"
-                    >
-                        {{ props.row.concat_name }}
-                    </a>
-                </span>
-                <span v-else>
-                    {{ props.formattedRow[props.column.field] }} SOSO
-                </span>
-            </template>
-        </vue-good-table>
+            <li
+                v-for="(searchResult, index) of searchResults"
+                :key="index"
+                class="list-group-item"
+            >
+                <a
+                    class="btn-icon search-result-button"
+                    @click="selectWaterStreet(searchResult);setFocusToFromKM();"
+                >
+                    {{ searchResult.concat_name }}
+                </a>
+            </li>
+        </ul>
         <div v-if="selectedWaterStreet">
             <InputText
                 id="ws-locator-from"
@@ -246,5 +230,25 @@ export default {
     color: #00447a;
     text-decoration: underline;
     cursor: pointer;
+}
+
+.list-group {
+    position: absolute;
+    z-index: 999;
+}
+
+.list-group-item:hover {
+    color: #00447a;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.dropdown-menu-search {
+    max-height: 80%;
+    overflow: auto;
+    max-width: 100% !important;
+    top: unset;
+    left: 20px;
+    right: 20px;
 }
 </style>

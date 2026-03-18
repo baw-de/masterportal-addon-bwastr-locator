@@ -36,8 +36,8 @@ const actions = {
             .getGeometry()
             .setCoordinates([]);
     },
-    selectWaterStreet ({state}, row) {
-        state.selectedWaterStreet = row.row;
+    selectWaterStreet ({state}, waterStreet) {
+        state.selectedWaterStreet = waterStreet;
         state.fromKilometer = state.selectedWaterStreet.km_von;
         state.toKilometer = state.selectedWaterStreet.km_bis;
         state.searchText = state.selectedWaterStreet.concat_name;
