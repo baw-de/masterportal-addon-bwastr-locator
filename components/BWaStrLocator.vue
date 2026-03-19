@@ -156,7 +156,6 @@ export default {
             :aria-label="translate('additional:modules.tools.bWaStrLocator.searchPlaceholder')"
             :label="translate('additional:modules.tools.bWaStrLocator.searchPlaceholder')"
             max-length="50"
-            :input="search"
             :onInput="search"
         />
         <ul
@@ -184,7 +183,6 @@ export default {
                 :placeholder="translate('additional:modules.tools.bWaStrLocator.fromKMPlaceholder')"
                 :aria-label="translate('additional:modules.tools.bWaStrLocator.fromKMPlaceholder')"
                 :label="translate('additional:modules.tools.bWaStrLocator.fromKMPlaceholder')"
-                :input="(newValue) => {setFromKilometer(newValue.replace(',', '.'));}"
                 :onInput="(newValue) => {setFromKilometer(newValue.replace(',', '.'));}"
             />
             <InputText
@@ -194,7 +192,6 @@ export default {
                 :placeholder="translate('additional:modules.tools.bWaStrLocator.toKMPlaceholder')"
                 :aria-label="translate('additional:modules.tools.bWaStrLocator.toKMPlaceholder')"
                 :label="translate('additional:modules.tools.bWaStrLocator.toKMPlaceholder')"
-                :input="(newValue) => {setToKilometer(newValue.replace(',', '.'));}"
                 :onInput="(newValue) => {setToKilometer(newValue.replace(',', '.'));}"
             />
             <FlatButton
