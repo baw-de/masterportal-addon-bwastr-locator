@@ -40,7 +40,7 @@ const actions = {
         state.bwastrVisible = true;
 
         if(zoomToExtent){
-            map.getView().fit(wsSource.getExtent());
+            map.getView().fit(wsSource.getExtent(), {maxZoom: state.maxZoom});
         }
     },
     reset ({state}) {

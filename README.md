@@ -45,7 +45,8 @@ const Config = {
             "wsQueryAPI": "https://via.bund.de/wsv/bwastr-locator/rest/bwastrinfo/query",
             "geocodingQueryAPI": "https://via.bund.de/wsv/bwastr-locator/rest/geokodierung/query",
             "wkId": 25833,
-            "searchField": "all"
+            "searchField": "all",
+            "maxZoom": 12
           },
           ...
         ]
@@ -61,6 +62,7 @@ const Config = {
 | geocodingQueryAPI | https://via.bund.de/wsv/bwastr-locator/rest/geokodierung/query | (String) URL of the public REST API of service BWaStr Locator (geocoding) |
 | searchField | all | (String) Search field. Available values: "all" (default), "bwastrid", "bwastr_name", "strecken_name". For more information see [documentation of BWaStr-Locator-REST-API](https://www.google.com/search?q=Bundeswasserstra%C3%9Fen-Locator+REST). |
 | wkId | 25832 | (Number) Spatial reference system (EPSG code) to use for displaying geometries (i.e. 25833)|
+| maxZoom | 12 | (Number) Maximal zoom when focus on selected waterway.|
 
 
 ## How to use it
