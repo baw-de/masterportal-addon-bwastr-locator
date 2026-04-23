@@ -21,7 +21,10 @@ const state = {
     selectedWaterStreet: null,
     searchText: "",
     toKilometer: 0,
-    fromKilometer: 0
+    fromKilometer: 0,
+    bwastrVisible: false,
+    initZoom: false,
+    maxZoom: 12,
 };
 
 export default state;

@@ -1,17 +1,14 @@
 <script>
 import {mapActions, mapGetters, mapMutations} from "vuex";
 import getters from "../store/gettersBWaStrLocator";
-import FlatButton from "../../../src/shared/modules/buttons/components/FlatButton.vue";
-import InputText from "../../../src/shared/modules/inputs/components/InputText.vue";
-import "vue-good-table-next/dist/vue-good-table-next.css";
-import {VueGoodTable} from "vue-good-table-next";
+import FlatButton from "@shared/modules/buttons/components/FlatButton.vue";
+import InputText from "@shared/modules/inputs/components/InputText.vue";
 import axios from "axios";
 import mutations from "../store/mutationsBWaStrLocator";
 
 export default {
     name: "BWaStrLocator",
     components: {
-        VueGoodTable,
         FlatButton,
         InputText
     },
@@ -39,14 +36,11 @@ export default {
                 if (bwastr) {
                     this.setSearchText(bwastr.concat_name);
                     this.setSelectedWaterStreet(bwastr);
-                    this.showWaterStreet(false);
+                    this.showWaterStreet(this.initZoom);
                 }
             });
             this.setBwastrid(undefined);
         }
-    },
-    beforeUnmount () {
-        this.reset();
     },
     methods: {
         /**
@@ -59,15 +53,6 @@ export default {
                     this.$refs["ws-locator-search"].$el.firstChild.focus();
                 }
             });
-        },
-        getSearchResultColumns () {
-            return [
-                {
-                    label: this.translate("additional:modules.tools.bWaStrLocator.columns.concatName"),
-                    field: "concat_name",
-                    tdClass: "table-link"
-                }
-            ];
         },
         search (searchText) {
             this.setSearchText(searchText);
@@ -105,10 +90,9 @@ export default {
             this.adjustFromAndToValues();
             this.fetchGeocoding(this.selectedWaterStreet.bwastrid, this.fromKilometer, this.toKilometer).then(geocoding => {
                 if (geocoding.length > 0) {
-                    this.geocoding = geocoding[0];
-                    const geometry = this.geocoding.geometry;
+                    this.geocoding = geocoding[0];;
 
-                    this.drawWaterStreetToMap({geometry, zoomToExtent});
+                    this.drawWaterStreetToMap({waterstreet: this.geocoding, zoomToExtent});
                 }
             });
         },
@@ -167,49 +151,48 @@ export default {
             id="ws-locator-search"
             ref="ws-locator-search"
             :value="searchText"
+            :modelValue="searchText"
             :placeholder="translate('additional:modules.tools.bWaStrLocator.searchPlaceholder')"
             :aria-label="translate('additional:modules.tools.bWaStrLocator.searchPlaceholder')"
             :label="translate('additional:modules.tools.bWaStrLocator.searchPlaceholder')"
             max-length="50"
-            :input="search"
+            :onInput="search"
         />
-        <vue-good-table
+        <ul
             v-if="searchResults.length > 0 && !selectedWaterStreet"
-            :columns="getSearchResultColumns()"
-            :rows="searchResults"
-            max-height="calc(100vh - 400px)"
-            :row-style-class="'table-row alternating-color'"
+            class="list-group dropdown-menu-search dropdown-menu-left"
         >
-            <template #table-row="props">
-                <span v-if="props.column.field === 'concat_name'">
-                    <a
-                        href="#"
-                        @click="selectWaterStreet(props);setFocusToFromKM();"
-                    >
-                        {{ props.row.concat_name }}
-                    </a>
-                </span>
-                <span v-else>
-                    {{ props.formattedRow[props.column.field] }} SOSO
-                </span>
-            </template>
-        </vue-good-table>
+            <li
+                v-for="(searchResult, index) of searchResults"
+                :key="index"
+                class="list-group-item"
+            >
+                <a
+                    class="btn-icon search-result-button"
+                    @click="selectWaterStreet(searchResult);setFocusToFromKM();"
+                >
+                    {{ searchResult.concat_name }}
+                </a>
+            </li>
+        </ul>
         <div v-if="selectedWaterStreet">
             <InputText
                 id="ws-locator-from"
                 :value="fromKilometer.toString()"
+                :modelValue="fromKilometer.toString()"
                 :placeholder="translate('additional:modules.tools.bWaStrLocator.fromKMPlaceholder')"
                 :aria-label="translate('additional:modules.tools.bWaStrLocator.fromKMPlaceholder')"
                 :label="translate('additional:modules.tools.bWaStrLocator.fromKMPlaceholder')"
-                :input="(newValue) => {setFromKilometer(newValue.replace(',', '.'));}"
+                :onInput="(newValue) => {setFromKilometer(newValue.replace(',', '.'));}"
             />
             <InputText
                 id="ws-locator-till"
                 :value="toKilometer.toString()"
+                :modelValue="toKilometer.toString()"
                 :placeholder="translate('additional:modules.tools.bWaStrLocator.toKMPlaceholder')"
                 :aria-label="translate('additional:modules.tools.bWaStrLocator.toKMPlaceholder')"
                 :label="translate('additional:modules.tools.bWaStrLocator.toKMPlaceholder')"
-                :input="(newValue) => {setToKilometer(newValue.replace(',', '.'));}"
+                :onInput="(newValue) => {setToKilometer(newValue.replace(',', '.'));}"
             />
             <FlatButton
                 :id="'show-water-street'"
@@ -217,6 +200,14 @@ export default {
                 :aria-label="translate('additional:modules.tools.bWaStrLocator.showWaterStreet')"
                 :icon="'bi-search'"
                 :interaction="() => showWaterStreet()"
+            />
+            <FlatButton
+                v-if="bwastrVisible"
+                :id="'reset-ws'"
+                :text="translate('additional:modules.tools.bWaStrLocator.resetWaterStreet')"
+                :aria-label="translate('additional:modules.tools.bWaStrLocator.resetWaterStreet')"
+                :icon="'bi-trash'"
+                :interaction="() => reset()"
             />
         </div>
     </div>
@@ -240,5 +231,30 @@ export default {
     color: #00447a;
     text-decoration: underline;
     cursor: pointer;
+}
+
+.ws-search #reset-ws {
+    width: 100%;
+    max-width: 100% !important;
+}
+
+.list-group {
+    position: absolute;
+    z-index: 999;
+}
+
+.list-group-item:hover {
+    color: #00447a;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.dropdown-menu-search {
+    max-height: 80%;
+    overflow: auto;
+    max-width: 100% !important;
+    top: unset;
+    left: 20px;
+    right: 20px;
 }
 </style>

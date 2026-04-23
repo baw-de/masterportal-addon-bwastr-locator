@@ -7,8 +7,13 @@
         "fromKMPlaceholder": "from km",
         "toKMPlaceholder": "to km",
         "showWaterStreet": "Show waterway",
-        "columns": {
-          "concatName": "Results"
+        "resetWaterStreet": "Reset waterway",
+        "gfiAttributes": {
+          "bwastrid": "Waterway Id",
+          "bwastr_name": "Waterway Name",
+          "strecken_name": "Waterway Route",
+          "fromKM": "From km",
+          "toKM": "To km"
         }
       }
     }

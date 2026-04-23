@@ -1,5 +1,5 @@
 # BWaStr-Locator addon for Masterportal v3
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) ![version](https://img.shields.io/badge/Version-1.2.0-blue)
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT) ![version](https://img.shields.io/badge/Version-1.3.0-blue)
 
 This [Masterportal](https://www.masterportal.org/) addon provides a feature for searching german waterways and segments of waterways. The search is based on the service [BWaStr-Locator](https://via.bund.de/wsv/bwastr-locator).
 
@@ -45,7 +45,8 @@ const Config = {
             "wsQueryAPI": "https://via.bund.de/wsv/bwastr-locator/rest/bwastrinfo/query",
             "geocodingQueryAPI": "https://via.bund.de/wsv/bwastr-locator/rest/geokodierung/query",
             "wkId": 25833,
-            "searchField": "all"
+            "searchField": "all",
+            "maxZoom": 12
           },
           ...
         ]
@@ -61,6 +62,7 @@ const Config = {
 | geocodingQueryAPI | https://via.bund.de/wsv/bwastr-locator/rest/geokodierung/query | (String) URL of the public REST API of service BWaStr Locator (geocoding) |
 | searchField | all | (String) Search field. Available values: "all" (default), "bwastrid", "bwastr_name", "strecken_name". For more information see [documentation of BWaStr-Locator-REST-API](https://www.google.com/search?q=Bundeswasserstra%C3%9Fen-Locator+REST). |
 | wkId | 25832 | (Number) Spatial reference system (EPSG code) to use for displaying geometries (i.e. 25833)|
+| maxZoom | 12 | (Number) Maximal zoom when focus on selected waterway.|
 
 
 ## How to use it
@@ -69,6 +71,7 @@ const Config = {
 3. Select an entry from search results.
 4. Adjust parameters *from-km* and *to-km* (optional). Use number format "123.45".
 5. Click button "*Show waterway*" to display waterway/segment in the map.
+6. Click button "*Reset waterway*" to remove waterway/segment from the map.
 
 ## Features
 
