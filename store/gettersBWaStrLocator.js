@@ -1,5 +1,5 @@
 import stateBWaStrLocator from "./stateBWaStrLocator";
-import {generateSimpleGetters} from "../../../src/shared/js/utils/generators";
+import {generateSimpleGetters} from "@shared/js/utils/generators";
 
 const getters = {
     ...generateSimpleGetters(stateBWaStrLocator),

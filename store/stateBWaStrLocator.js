@@ -24,7 +24,7 @@ const state = {
     fromKilometer: 0,
     bwastrVisible: false,
     initZoom: false,
-    maxZoom: 12,
+    maxZoom: 12
 };
 
 export default state;

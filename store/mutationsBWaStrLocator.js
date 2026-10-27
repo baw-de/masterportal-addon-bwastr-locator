@@ -1,5 +1,5 @@
 import stateBWaStrLocator from "./stateBWaStrLocator";
-import {generateSimpleMutations} from "../../../src/shared/js/utils/generators";
+import {generateSimpleMutations} from "@shared/js/utils/generators";
 
 const mutations = {
     ...generateSimpleMutations(stateBWaStrLocator)

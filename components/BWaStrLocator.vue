@@ -90,7 +90,7 @@ export default {
             this.adjustFromAndToValues();
             this.fetchGeocoding(this.selectedWaterStreet.bwastrid, this.fromKilometer, this.toKilometer).then(geocoding => {
                 if (geocoding.length > 0) {
-                    this.geocoding = geocoding[0];;
+                    this.geocoding = geocoding[0];
 
                     this.drawWaterStreetToMap({waterstreet: this.geocoding, zoomToExtent});
                 }
@@ -98,7 +98,8 @@ export default {
         },
         adjustFromAndToValues () {
             const hasFromKilometer = this.fromKilometer.length > 0,
-                hasToKilometer = this.toKilometer.length > 0;
+                  hasToKilometer = this.toKilometer.length > 0;
+
             this.setFromKilometer(this.fromKilometer < this.selectedWaterStreet.km_von || this.fromKilometer > this.selectedWaterStreet.km_bis ? this.selectedWaterStreet.km_von : this.fromKilometer);
             if (!hasFromKilometer || hasToKilometer){
                 this.setToKilometer(this.toKilometer < this.selectedWaterStreet.km_von || this.toKilometer > this.selectedWaterStreet.km_bis ? this.selectedWaterStreet.km_bis : this.toKilometer);
